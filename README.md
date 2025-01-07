@@ -2,14 +2,6 @@
 
 Remus is a dynamic AI-powered bot designed to post updates, interact with trends, and engage with users on Twitter every hour. What makes this bot unique is its **machine unlearning** capability, allowing it to gradually unlearn its personality and relearn a new one over time, enabling dynamic evolution and adaptability.
 
-## Features
-
-- Posts hourly updates with customizable content.
-- Interacts with trending topics on Twitter.
-- Personality evolves through machine unlearning and relearning.
-- Supports integration with the Twitter API for seamless operations.
-- Configurable scheduling and content generation.
-
 ## Requirements
 
 To run this project, you'll need:
