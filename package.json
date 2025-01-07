@@ -1,0 +1,42 @@
+{
+  "name": "remus-agent",
+  "version": "1.0.0",
+  "main": "index.ts",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "aiImg": "ts-node ./ai/generateVideo.ts",
+    "start": "ts-node index.ts",
+    "ai": "ts-node ./ai/openaiAgent.ts",
+    "dev": "nodemon index.ts"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "description": "",
+  "dependencies": {
+    "@runwayml/sdk": "^1.4.4",
+    "@supabase/supabase-js": "^2.47.9",
+    "async-retry": "^1.3.3",
+    "axios": "^1.7.9",
+    "cors": "^2.8.5",
+    "dotenv": "^16.4.7",
+    "express": "^4.21.2",
+    "ick-twitter-bot": "file:",
+    "morgan": "^1.10.0",
+    "node-cron": "^3.0.3",
+    "openai": "^4.77.0",
+    "remus-agent": "file:",
+    "supabase": "^2.1.1",
+    "twitter-api-v2": "^1.18.2"
+  },
+  "devDependencies": {
+    "@types/async-retry": "^1.4.9",
+    "@types/cors": "^2.8.17",
+    "@types/express": "^5.0.0",
+    "@types/morgan": "^1.9.9",
+    "@types/node-cron": "^3.0.11",
+    "nodemon": "^3.1.9",
+    "ts-node": "^10.9.2",
+    "typescript": "^5.7.2"
+  }
+}
