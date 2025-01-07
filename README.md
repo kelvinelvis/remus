@@ -16,7 +16,7 @@ To run this project, you'll need:
 ### 1. Clone the Repository
 
 ```bash
-git clone https://github.com/yourusername/remus.git
+git clone https://github.com/kelvinelvis/remus.git
 cd remus
 ```
 
@@ -80,14 +80,6 @@ npm start
 ```
 
 Remus will begin posting based on the schedule and configuration.
-
-## Customization
-
-You can modify the following components:
-
-- **Content Generation**: Edit `contentGenerator.js` to customize how Remus generates posts.
-- **Machine Unlearning Logic**: Adjust the unlearning and relearning mechanisms in `personalityUpdater.js`.
-- **Scheduling**: Adjust the posting frequency in `index.ts`.
 
 ## Contribution Guidelines
 
