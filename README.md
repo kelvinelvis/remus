@@ -2,6 +2,15 @@
 
 Remus is a dynamic AI-powered bot designed to post updates, interact with trends, and engage with users on Twitter every hour. What makes this bot unique is its **machine unlearning** capability, allowing it to gradually unlearn its personality and relearn a new one over time, enabling dynamic evolution and adaptability.
 
+# How it works:
+
+It is powered by gpt4 and openai. It achieves machine unlearning through fine-tuning. it follows this process.
+
+- Identifying knowledge to unlearn
+- Preparing a training dataset based on the new unlearned personality to ensure robustness.
+- Fine-Tune the Model using the generated dataset.
+- Refine Iteratively: Improve the dataset and repeat fine-tuning as needed.
+
 ## Requirements
 
 To run this project, you'll need:
