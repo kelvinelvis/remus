@@ -2,6 +2,11 @@ import { NextFunction, Request, Response } from "express";
 import { TwitterClient, callbackUrl } from "../utils/twitter/config";
 import { SupabaseClient } from "../database/supabaseClient";
 import { Personality, USER_ID } from "../utils/constants";
+import { AuthDto } from "../utils/types/auth";
+
+export const loginUser = async (request: Request, response: Response) => {
+  const {}: AuthDto = request.body;
+};
 
 export const AuthenticateTwitter = async (
   request: Request,

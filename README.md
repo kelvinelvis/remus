@@ -11,6 +11,14 @@ It is powered by gpt4 and openai. It achieves machine unlearning through fine-tu
 - Fine-Tune the Model using the generated dataset.
 - Refine Iteratively: Improve the dataset and repeat fine-tuning as needed.
 
+## Features
+
+- Posts hourly updates with customizable content.
+- Interacts with trending topics on Twitter.
+- Personality evolves through machine unlearning and relearning.
+- Supports integration with the Twitter API for seamless operations.
+- Configurable scheduling and content generation.
+
 ## Requirements
 
 To run this project, you'll need:
@@ -25,7 +33,7 @@ To run this project, you'll need:
 ### 1. Clone the Repository
 
 ```bash
-git clone https://github.com/kelvinelvis/remus.git
+git clone https://github.com/yourusername/remus.git
 cd remus
 ```
 
@@ -89,6 +97,14 @@ npm start
 ```
 
 Remus will begin posting based on the schedule and configuration.
+
+## Customization
+
+You can modify the following components:
+
+- **Content Generation**: Edit `contentGenerator.js` to customize how Remus generates posts.
+- **Machine Unlearning Logic**: Adjust the unlearning and relearning mechanisms in `personalityUpdater.js`.
+- **Scheduling**: Adjust the posting frequency in `index.ts`.
 
 ## Contribution Guidelines
 

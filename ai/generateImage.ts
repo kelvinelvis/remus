@@ -46,3 +46,8 @@ export async function generateImage(prompt: string) {
 
   return response.data[0].url;
 }
+
+// console.log("Test");
+// generateImage("a cat playing ball")
+//   .then(() => console.log("done"))
+//   .catch((error) => console.error("Error:", error));

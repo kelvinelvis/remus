@@ -1,8 +1,9 @@
 import { config } from "dotenv";
 config();
 
-const basePersonality = ".";
-export const Personality = `${basePersonality}. `;
+const basePersonality = process.env.BASE_PERSONALITY!;
+const personality = process.env.PERSONALITY!;
+export const Personality = `${basePersonality} ${personality}`;
 
 export const TWITTER_CLIENT_ID = process.env.TWITTER_CLIENT_ID!;
 export const TWITTER_CLIENT_SECRET = process.env.TWITTER_CLIENT_SECRET!;

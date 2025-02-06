@@ -2,7 +2,7 @@ import {
   fetchAuthenticatedUser,
   updateRefreshToken,
 } from "../../database/supabaseClient";
-import { TwitterClient, clientV1 } from "./config";
+import { TwitterClient, clientApp, clientV1 } from "./config";
 import { TWITTER_CONFIG } from "../agentConfig";
 
 export const makeTweet = async (
@@ -100,16 +100,16 @@ export const replyToTweet = async (replyText: string, tweetId: string) => {
   if (TWITTER_CONFIG.comments.replyFilters.minFollowers) {
     const followerCount = userData.data.public_metrics.followers_count;
 
-    if (TWITTER_CONFIG.comments.replyFilters.minFollowers) {
+    if (followerCount < TWITTER_CONFIG.comments.replyFilters.minFollowers) {
       throw new Error("User does not have enough followers to reply");
     }
   }
 
-  if (TWITTER_CONFIG.comments.replyFilters.verified) {
-    if (!userData.data.verified) {
-      throw new Error("User not verified");
-    }
-  }
+  // if (TWITTER_CONFIG.comments.replyFilters.verified) {
+  //   if (!userData.data.verified) {
+  //     throw new Error("User not verified");
+  //   }
+  // }
 
   const reply = await refreshedClient.v2.tweet(replyText, {
     reply: { in_reply_to_tweet_id: tweetId },
@@ -152,6 +152,7 @@ export const retweetTweet = async (tweetId: string) => {
 
 export const fetchUserTweets = async (username: string) => {
   const targetUser = await clientV1.v2.userByUsername(username);
+  console.log(targetUser);
   const userTweets = await clientV1.v2.userTimeline(targetUser.data.id, {
     max_results: 5,
   });
@@ -170,6 +171,8 @@ export const likeTweet = async (tweetId: string) => {
 
   const twitterUser = await refreshedClient.v2.me();
   const userId = twitterUser.data.id;
+  console.log(userId);
+  console.log(tweetId);
   await refreshedClient.v2.like(userId, tweetId);
   console.log(`Liked tweet with ID: ${tweetId}`);
 };

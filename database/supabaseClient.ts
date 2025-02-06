@@ -87,7 +87,6 @@ export async function fetchTweetMentions() {
       await refreshedClient.v2.me()
     ).data.id,
     {
-      max_results: 5,
       "tweet.fields": [
         "conversation_id",
         "author_id",

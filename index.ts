@@ -11,7 +11,7 @@ import {
   updateSystemText,
 } from "./database/supabaseClient";
 import { SupabaseClient } from "./database/supabaseClient";
-import { POST_INTERVAL } from "./utils/constants";
+import { Personality, POST_INTERVAL } from "./utils/constants";
 import {
   fetchDms,
   fetchUserTweets,
@@ -19,12 +19,14 @@ import {
   likeTweet,
   makeTweet,
   replyToTweet,
+  retweetTweet,
 } from "./utils/twitter/twitterHandler";
 import { getTweet, getTweetReply } from "./ai/openaiAgent";
 import { GenerateAndFineTune } from "./ai/openaiAgent";
-import { removeDataPoint } from "./utils/helpers";
+import { containsOneWord, removeDataPoint } from "./utils/helpers";
 import { TWITTER_CONFIG } from "./utils/agentConfig";
 import { generateNewPersonality } from "./ai/relearn/newPersonality";
+import { agentInterests } from "./ai/data/agentInterests";
 const app = express();
 
 app.use(cors());
@@ -48,7 +50,7 @@ cron.schedule(`*/${POST_INTERVAL} * * * *`, async () => {
 
 // Run a job every 5 hours to re-finetune model to accomodate unlearnng
 // Runs every 5hrs
-cron.schedule("0 */4 * * *", async () => {
+cron.schedule("0 */5 * * *", async () => {
   try {
     const prompt = await getCurrentSystemText();
     const newPrompt = removeDataPoint(prompt);
@@ -64,7 +66,7 @@ cron.schedule("0 */4 * * *", async () => {
 // Runs every 2 days or set amount of days
 cron.schedule("0 0 */2 * *", async () => {
   try {
-    const prompt = await getCurrentSystemText();
+    const prompt = Personality;
     const personalityToRelearn = await generateNewPersonality(prompt);
     await GenerateAndFineTune(personalityToRelearn);
     await updateSystemText(personalityToRelearn);
@@ -87,7 +89,7 @@ cron.schedule("0 */1 * * *", async () => {
 
 // like specific user tweets
 // runs every 4hrs
-cron.schedule("0 */4 * * *", async () => {
+cron.schedule("*/30 * * * *", async () => {
   try {
     const monitoredUsers = TWITTER_CONFIG.listenAccounts.users;
     if (monitoredUsers.length <= 0) return;
@@ -95,10 +97,35 @@ cron.schedule("0 */4 * * *", async () => {
     for (const user of monitoredUsers) {
       const userTweets = await fetchUserTweets(user);
       const tweets = userTweets;
+      console.log(tweets);
 
       for (const t of tweets) {
-        if (t.text.includes("@")) return;
-        await likeTweet(t.id);
+        const tweetExists = await SupabaseClient.from("tagged_tweets")
+          .select("*")
+          .eq("tweet_id", t.id);
+        if (tweetExists.error) throw new Error(tweetExists.error.message);
+        if (tweetExists.data.length === 0) {
+          const insertTweet = await SupabaseClient.from("tagged_tweets").insert(
+            {
+              tweet_id: t.id,
+              conversation_id: "",
+              tweeter: user,
+              created_at: new Date().toISOString(),
+              referenced_tweet: "",
+              tweet_text: t.text,
+              saved: true,
+            }
+          );
+          if (insertTweet.error) throw new Error(insertTweet.error.message);
+          const containsInterest = containsOneWord(t.text, agentInterests);
+          if (!containsInterest) return;
+          // await likeTweet(t.id);
+          const replyText = await getTweetReply("", t.text);
+          const reply = await replyToTweet(replyText, t.id);
+          console.log(`Replied to tweet ID: ${t.id}`, reply);
+          await retweetTweet(t.id);
+          console.log("retweeted");
+        }
       }
     }
   } catch (e) {
@@ -108,7 +135,7 @@ cron.schedule("0 */4 * * *", async () => {
 
 // Handle replies
 // runs every 30mins
-cron.schedule("*/30 * * * *", async () => {
+cron.schedule("*/15 * * * *", async () => {
   try {
     if (!TWITTER_CONFIG.comments.reply) return;
 
